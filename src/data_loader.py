@@ -25,18 +25,22 @@ class DataLoader:
         self.processed_data = None
         self.summary_data = None
 
-    @st.cache_data(ttl=3600)
-    def load_data(_self) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600, show_spinner="Loading CSV files...")
+    def load_data(data_dir: Path) -> pd.DataFrame:
         """
         Load all CSV files from data directory and combine into single DataFrame
+
+        Args:
+            data_dir: Path to directory containing CSV files
 
         Returns:
             Combined DataFrame with all trip data
         """
-        csv_paths = sorted(_self.data_dir.rglob("*.csv"))
+        csv_paths = sorted(data_dir.rglob("*.csv"))
 
         if not csv_paths:
-            raise FileNotFoundError(f"No CSV files found in {_self.data_dir}")
+            raise FileNotFoundError(f"No CSV files found in {data_dir}")
 
         dfs = []
         for f in csv_paths:
@@ -52,10 +56,11 @@ class DataLoader:
             raise ValueError("No data was successfully loaded")
 
         data = pd.concat(dfs, ignore_index=True)
-        _self.raw_data = data
         return data
 
-    def clean_and_process(self, data: pd.DataFrame) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600, show_spinner="Processing trip data...")
+    def clean_and_process(data: pd.DataFrame) -> pd.DataFrame:
         """
         Clean and process raw trip data
 
@@ -93,10 +98,11 @@ class DataLoader:
         df["is_weekend"] = df["day_of_week"].isin([5, 6])
         df["day_type"] = df["is_weekend"].map({True: "Weekend", False: "Weekday"})
 
-        self.processed_data = df
         return df
 
-    def generate_quarterly_summary(self, data: pd.DataFrame) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600, show_spinner="Calculating quarterly summaries...")
+    def generate_quarterly_summary(data: pd.DataFrame) -> pd.DataFrame:
         """
         Generate quarterly summary statistics
 
@@ -147,10 +153,11 @@ class DataLoader:
             summary["avg_duration"].rolling(window=4).mean()
         )
 
-        self.summary_data = summary
         return summary
 
-    def get_station_summary(self, data: pd.DataFrame) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600)
+    def get_station_summary(data: pd.DataFrame) -> pd.DataFrame:
         """
         Generate station-level summary statistics
 
@@ -174,7 +181,9 @@ class DataLoader:
 
         return station_summary.reset_index()
 
-    def get_hourly_patterns(self, data: pd.DataFrame) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600)
+    def get_hourly_patterns(data: pd.DataFrame) -> pd.DataFrame:
         """
         Analyze trip patterns by hour of day
 
@@ -192,7 +201,9 @@ class DataLoader:
 
         return hourly
 
-    def get_daily_patterns(self, data: pd.DataFrame) -> pd.DataFrame:
+    @staticmethod
+    @st.cache_data(ttl=3600)
+    def get_daily_patterns(data: pd.DataFrame) -> pd.DataFrame:
         """
         Analyze trip patterns by day of week
 
@@ -255,13 +266,16 @@ class DataLoader:
         Returns:
             Tuple of (processed_data, summary_data)
         """
-        # Load raw data
-        raw_data = self.load_data()
+        # Load raw data (cached)
+        raw_data = DataLoader.load_data(self.data_dir)
+        self.raw_data = raw_data
 
-        # Clean and process
-        processed_data = self.clean_and_process(raw_data)
+        # Clean and process (cached)
+        processed_data = DataLoader.clean_and_process(raw_data)
+        self.processed_data = processed_data
 
-        # Generate summary
-        summary_data = self.generate_quarterly_summary(processed_data)
+        # Generate summary (cached)
+        summary_data = DataLoader.generate_quarterly_summary(processed_data)
+        self.summary_data = summary_data
 
         return processed_data, summary_data

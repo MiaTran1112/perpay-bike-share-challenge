@@ -42,10 +42,7 @@ def get_visualizer():
 def load_and_process_data():
     """Load and process all data"""
     loader = get_data_loader()
-
-    with st.spinner("Loading data..."):
-        processed_data, summary_data = loader.get_full_pipeline()
-
+    processed_data, summary_data = loader.get_full_pipeline()
     return loader, processed_data, summary_data
 
 
@@ -203,7 +200,7 @@ def render_growth_analysis(summary_data: pd.DataFrame, visualizer: Visualizer):
 
 
 def render_usage_patterns(
-    processed_data: pd.DataFrame, loader: DataLoader, visualizer: Visualizer
+    processed_data: pd.DataFrame, visualizer: Visualizer
 ):
     """Render usage patterns analysis section"""
     st.header("Usage Patterns Analysis")
@@ -212,7 +209,7 @@ def render_usage_patterns(
 
     with tab1:
         st.markdown("### Trip Patterns by Hour of Day")
-        hourly_data = loader.get_hourly_patterns(processed_data)
+        hourly_data = DataLoader.get_hourly_patterns(processed_data)
         fig = visualizer.plot_hourly_patterns(hourly_data)
         st.pyplot(fig)
 
@@ -224,7 +221,7 @@ def render_usage_patterns(
 
     with tab2:
         st.markdown("### Trip Patterns by Day of Week")
-        daily_data = loader.get_daily_patterns(processed_data)
+        daily_data = DataLoader.get_daily_patterns(processed_data)
         fig = visualizer.plot_daily_patterns(daily_data)
         st.pyplot(fig)
 
@@ -249,12 +246,12 @@ def render_usage_patterns(
 
 
 def render_station_analysis(
-    processed_data: pd.DataFrame, loader: DataLoader, visualizer: Visualizer
+    processed_data: pd.DataFrame, visualizer: Visualizer
 ):
     """Render station analysis section"""
     st.header("Station Analysis")
 
-    station_data = loader.get_station_summary(processed_data)
+    station_data = DataLoader.get_station_summary(processed_data)
 
     st.markdown("### Station Statistics")
 
@@ -530,8 +527,8 @@ def main():
     render_kpi_cards(kpis, growth_metrics)
     render_time_series_analysis(summary_data, viz)
     render_growth_analysis(summary_data, viz)
-    render_usage_patterns(processed_data, loader, viz)
-    render_station_analysis(processed_data, loader, viz)
+    render_usage_patterns(processed_data, viz)
+    render_station_analysis(processed_data, viz)
     render_advanced_metrics(processed_data, summary_data, viz)
     render_data_explorer(processed_data, summary_data, loader)
     render_insights_and_recommendations()
