@@ -105,27 +105,3 @@ Track quarterly QoQ and YoY trends to ensure scalability remains aligned with de
 ## 💡 Key Takeaway
 > Indego’s ~15% annual growth rate reflects a **mature, sustainable, and scalable program**.  
 > The focus for the next phase should be **strategic optimization**, not aggressive expansion.
-
----
-
-## 🧰 Project Structure
-
-perpay-bike-share-challenge/
-│
-├── data/ # Folder containing Indego CSV files (2020–2025)
-│ ├── indego-trips-2020-q1.csv
-│ ├── indego-trips-2020-q2.csv
-│ └── ...
-│
-├── images/ # Visualization outputs (.png)
-│ ├── total_trips_per_quarter.png
-│ ├── total_ride_min_per_quarter.png
-│ ├── avg_trip_duration.png
-│ └── rolling_12month.png
-│
-├── notebooks/
-│ └── eda.ipynb # Main exploratory data analysis notebook
-│
-├── requirements.txt # Python dependencies
-│
-└── README.md # Project documentation
