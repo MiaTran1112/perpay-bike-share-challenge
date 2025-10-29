@@ -6,7 +6,8 @@ from pathlib import Path
 
 # Project paths
 PROJECT_ROOT = Path(__file__).parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
+DATA_DIR = PROJECT_ROOT / "data" / "parquet"
+CSV_DIR = PROJECT_ROOT / "data" / "csv"
 IMAGES_DIR = PROJECT_ROOT / "images"
 
 # Data validation constraints
