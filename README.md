@@ -105,3 +105,14 @@ Track quarterly QoQ and YoY trends to ensure scalability remains aligned with de
 ## 💡 Key Takeaway
 > Indego’s ~15% annual growth rate reflects a **mature, sustainable, and scalable program**.  
 > The focus for the next phase should be **strategic optimization**, not aggressive expansion.
+
+ ---
+## 🎬 Demo
+
+<p align="center">
+  <a href="https://drive.google.com/file/d/1CPkrS0krggRU8LEEp070zOzbyCaV4y_2/view?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/▶️%20Watch%20Demo%20Video-blue?style=for-the-badge" alt="Watch Demo Video">
+  </a>
+</p>
+
+> 🎥 Click the button above to watch a short demo of the interactive **Streamlit app** that visualizes Indego’s quarterly ridership trends and growth metrics.
