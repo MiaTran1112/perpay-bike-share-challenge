@@ -18,7 +18,7 @@ class DataLoader:
         Initialize DataLoader with data directory path
 
         Args:
-            data_dir: Path to directory containing CSV files
+            data_dir: Path to directory containing Parquet files
         """
         self.data_dir = data_dir
         self.raw_data = None
@@ -26,26 +26,26 @@ class DataLoader:
         self.summary_data = None
 
     @staticmethod
-    @st.cache_data(ttl=3600, show_spinner="Loading CSV files...")
+    @st.cache_data(ttl=3600, show_spinner="Loading Parquet files...")
     def load_data(data_dir: Path) -> pd.DataFrame:
         """
-        Load all CSV files from data directory and combine into single DataFrame
+        Load all Parquet files from data directory and combine into single DataFrame
 
         Args:
-            data_dir: Path to directory containing CSV files
+            data_dir: Path to directory containing Parquet files
 
         Returns:
             Combined DataFrame with all trip data
         """
-        csv_paths = sorted(data_dir.rglob("*.csv"))
+        parquet_paths = sorted(data_dir.rglob("*.parquet"))
 
-        if not csv_paths:
-            raise FileNotFoundError(f"No CSV files found in {data_dir}")
+        if not parquet_paths:
+            raise FileNotFoundError(f"No Parquet files found in {data_dir}")
 
         dfs = []
-        for f in csv_paths:
+        for f in parquet_paths:
             try:
-                df = pd.read_csv(f, low_memory=False)
+                df = pd.read_parquet(f, engine='pyarrow')
                 df["source_file"] = f.name
                 dfs.append(df)
             except Exception as e:
